@@ -6,7 +6,7 @@ export default function HomePage() {
   const items = Array.from({ length: 6 }, (_, i) => ({
     title: `Thumbnail ${i + 1}`,
     date: "30 Desember 2024",
-    link: `https://example.com/thumbnail${i + 1}`,
+    link: `/news/details/${i + 1}`,
   }));
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -74,8 +74,8 @@ export default function HomePage() {
 
       <div className="grid">
         {items.map((item, index) => (
-          <div className="grid-item" key={index}>
-            <a href={item.link} target="_blank" rel="noopener noreferrer">
+          <div className="grid-item space-y-2" key={index}>
+            <a href={item.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full">
               <img src="/thumbnail.png" alt={item.title} />
             </a>
             <h2>{item.title}</h2>
