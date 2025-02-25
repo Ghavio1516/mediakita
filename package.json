@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "@prisma/extension-accelerate": "^1.2.2",
     "bootstrap": "^5.3.3",
     "next": "15.1.4",
     "react": "^19.0.0",
@@ -16,12 +18,29 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "22.13.4",
-    "@types/react": "19.0.10",
+    "@types/node": "^22.13.5",
+    "@types/react": "^19.0.10",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17"
-  }
+    "prisma": "^6.4.1",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "tailwind.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ghavio1516/mediakita.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ghavio1516/mediakita/issues"
+  },
+  "homepage": "https://github.com/Ghavio1516/mediakita#readme"
 }
