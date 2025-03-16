@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { getNewsById, getAllNews } from '../../../../action/news';
+import { getNewsById } from '../../../../action/news';
 
-// Menambahkan tipe untuk props
+// Mendefinisikan tipe data untuk props
 interface NewsDetailsProps {
   news: {
     title: string;
@@ -13,31 +13,10 @@ interface NewsDetailsProps {
   } | null;
 }
 
-// Fungsi untuk mengambil data berita berdasarkan news_id
-export async function getStaticProps({ params }: { params: { news_id: string } }) {
-  const news = await getNewsById(params.news_id);
+const NewsDetails = async ({ params }: { params: { news_id: string } }) => {
+  const news_id = params.news_id;
+  const news = await getNewsById(news_id); // Ambil data berita berdasarkan ID
 
-  return {
-    props: {
-      news, // Mengirimkan data berita sebagai props
-    },
-  };
-}
-
-// Fungsi untuk menentukan path dinamis untuk setiap halaman berita
-export async function getStaticPaths() {
-  const allNews = await getAllNews(); // Mengambil semua berita untuk mendapatkan semua ID
-  const paths = allNews.map((news) => ({
-    params: { news_id: news.id }, // Menyusun path berdasarkan ID berita
-  }));
-
-  return {
-    paths,
-    fallback: 'blocking', // Gunakan 'blocking' agar Next.js menunggu hingga data siap
-  };
-}
-
-const NewsDetails = ({ news }: NewsDetailsProps) => {
   if (!news) {
     return <div>News not found</div>; // Menangani jika berita tidak ditemukan
   }
