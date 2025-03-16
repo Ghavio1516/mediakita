@@ -31,7 +31,7 @@ export default async function HomePage() {
               <img src={item.thumbnail} alt={item.title} />
             </a>
             <h2>{item.title}</h2>
-            <p>{item.createdAt.toLocaleDateString()}</p>
+            <p>{new Date(item.createdAt).toLocaleDateString()}</p>
           </div>
         ))}
       </div>
