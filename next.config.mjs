@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 export default {
-    images: {
-      domains: ['ichef.bbci.co.uk'],  // Menambahkan domain gambar yang digunakan
-    },
-  };
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ichef.bbci.co.uk',  // Domain yang diizinkan
+      },
+    ],
+  },
+};
