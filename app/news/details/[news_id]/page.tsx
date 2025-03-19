@@ -41,15 +41,14 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
 
   // Function to format the content with paragraph breaks and proper spacing
   const formatContent = (content: string) => {
-    // Step 1: Normalize multiple spaces (but don't collapse into one space)
-    // This ensures that extra spaces within paragraphs are preserved
-    const formattedContent = content.replace(/\t/g, '    ').replace(/ {2,}/g, ' ');
+    // Split content by newlines into separate lines
+    const paragraphs = content.split('\n');
 
-    // Step 2: Split content by newlines and wrap each section in <p> tags
-    const paragraphs = formattedContent.split('\n');
-
+    // Return the paragraphs, wrapped in <p> tags
     return paragraphs.map((paragraph, index) => (
-      <p key={index} style={{ whiteSpace: 'pre-wrap' }}>{paragraph}</p>
+      <p key={index} style={{ marginBottom: '24px', whiteSpace: 'pre-wrap' }}>
+        {paragraph}
+      </p>
     ));
   };
 
