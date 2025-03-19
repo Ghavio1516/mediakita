@@ -41,24 +41,14 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
 
   // Function to format the content with paragraph breaks and proper spacing
   const formatContent = (content: string) => {
-    // Step 1: Normalize multiple spaces (but don't collapse into one space)
-    const formattedContent = content.replace(/\t/g, '    ').replace(/ {2,}/g, ' ');
+    // Split content by newlines (\n) and wrap each section in <p> tags
+    const paragraphs = content.split('\n');
 
-    // Step 2: Split content by newlines and wrap each section in <p> tags
-    const paragraphs = formattedContent.split('\n');
-
-    return paragraphs.map((paragraph, index) => {
-      // Ignore extra spacing between the "Journalist", "Photography", and "Editor" section
-      if (paragraph.trim() === '' && index === paragraphs.length - 1) {
-        return <br key={index} />; // Add a simple line break without extra space
-      }
-
-      return (
-        <p key={index} style={{ marginBottom: '24px', whiteSpace: 'pre-wrap' }}>
-          {paragraph}
-        </p>
-      );
-    });
+    return paragraphs.map((paragraph, index) => (
+      <p key={index} style={{ marginBottom: '24px', whiteSpace: 'pre-wrap' }}>
+        {paragraph}
+      </p>
+    ));
   };
 
   if (loading) {
