@@ -39,15 +39,19 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
     }
   }, [params.news_id]);
 
-  // Function to format the content with paragraph breaks and proper spacing
+  // Function to handle the content formatting (replacing \n with <br />)
   const formatContent = (content: string) => {
-    // Replace multiple spaces and tabs with a single space
-    const formattedContent = content.replace(/\s+/g, ' ').trim();
+    // Replace the \n characters with <br /> for line breaks
+    const formattedContent = content.split('\n').map((line, index) => {
+      return (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      );
+    });
 
-    // Split content by newlines and wrap each section in <p> tags
-    return formattedContent.split('\n').map((paragraph, index) => (
-      <p key={index}>{paragraph}</p>
-    ));
+    return formattedContent;
   };
 
   if (loading) {
@@ -73,8 +77,8 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
         className="mx-auto max-w-[80vw] h-[500px] object-cover rounded-2xl"
       />
       <div className="max-w-[80vw] mx-auto">
-        {/* Format and render content with paragraphs */}
-        {formatContent(news.content)}
+        {/* Format and render content with line breaks */}
+        <div className="text-center">{formatContent(news.content)}</div>
       </div>
     </div>
   );
