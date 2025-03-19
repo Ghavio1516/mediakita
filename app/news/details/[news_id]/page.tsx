@@ -1,41 +1,32 @@
-// app/news/details/[news_id]/page.tsx
+// page.tsx or newsDetails.tsx
 
-import React from 'react';
-import Image from 'next/image';
-import { getNewsById } from '../../../../action/news';
+import { useEffect, useState } from "react";
 
-// Mendefinisikan tipe data untuk props
-interface NewsDetailsProps {
-  news: {
-    title: string;
-    thumbnail: string;
-    content: string;
-  } | null;
-}
+export default function HomePage() {
+  const [news, setNews] = useState<any[]>([]);
 
-const NewsDetails = async ({ params }: { params: { news_id: string } }) => {
-  const news_id = params.news_id;
-  const news = await getNewsById(news_id); // Ambil data berita berdasarkan ID
-
-  if (!news) {
-    return <div>News not found</div>; // Menangani jika berita tidak ditemukan
-  }
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const response = await fetch('/api/news');  // Mengambil data dari API route
+        const data = await response.json();
+        setNews(data);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      }
+    }
+    fetchNews();
+  }, []);
 
   return (
-    <div className="space-y-8 py-8 px-6">
-      <h1 className="text-3xl font-bold text-center">{news.title}</h1>
-      <Image
-        src={news.thumbnail}
-        alt={news.title}
-        width={1920}
-        height={1080}
-        className="mx-auto max-w-[80vw] h-[500px] object-cover rounded-2xl"
-      />
-      <div className="max-w-[80vw] mx-auto">
-        <p className="text-center">{news.content}</p>
-      </div>
+    <div className="grid">
+      {news.map((item, index) => (
+        <div className="grid-item space-y-2" key={index}>
+          <img className="flex items-center justify-center w-full" src={item.thumbnail} alt={item.title} />
+          <h2>{item.title}</h2>
+          <p>{new Date(item.createdAt).toLocaleDateString()}</p>
+        </div>
+      ))}
     </div>
   );
-};
-
-export default NewsDetails;
+}

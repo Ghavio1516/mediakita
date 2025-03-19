@@ -6,15 +6,15 @@ export default function Header() {
       <div className="logo">
         {/* Membungkus gambar logo dengan Link untuk mengarah ke halaman utama */}
         <Link href="/">
-          <a>
-            <img src="/mediakitalogo.png" alt="Media Kita Logo" />
-          </a>
+          {/* Hapus <a> di dalam Link */}
+          <img src="/mediakitalogo.png" alt="Media Kita Logo" />
         </Link>
       </div>
       <nav>
         {/* Membungkus link "Home" dengan Link untuk navigasi */}
         <Link href="/">
-          <a className="active">Home</a>
+          {/* Hapus <a> di dalam Link */}
+          <span className="active">Home</span>
         </Link>
         <a href="#">Hot News</a>
         <a href="#">Entertainment</a>
