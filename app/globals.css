@@ -121,3 +121,8 @@ footer {
 .carousel-control:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
+
+p {
+  margin-bottom: 24px;  /* Increase the bottom margin for each paragraph */
+  line-height: 1.8;     /* Increase line height for better readability */
+}
