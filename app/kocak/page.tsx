@@ -3,16 +3,19 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function AdminPage() {
+  // State for the form inputs
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     thumbnail: ''
   });
 
+  // State for managing the list of news and handling loading and errors
   const [newsList, setNewsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState<string | null>(null);
+  const [editing, setEditing] = useState<string | null>(null);  // Store the ID of the news being edited
 
+  // Fetch all news on page load
   useEffect(() => {
     const fetchNews = async () => {
       try {
@@ -27,6 +30,7 @@ export default function AdminPage() {
     fetchNews();
   }, []);
 
+  // Handle input changes in the form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -34,9 +38,11 @@ export default function AdminPage() {
     });
   };
 
+  // Handle form submission for adding or editing news
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editing) {
+      // Edit existing news
       try {
         await axios.put(`/api/news`, { ...formData, id: editing });
         setFormData({ title: '', content: '', thumbnail: '' });
@@ -46,6 +52,7 @@ export default function AdminPage() {
         console.error('Error editing news:', error);
       }
     } else {
+      // Add new news
       try {
         await axios.post('/api/news', formData);
         setFormData({ title: '', content: '', thumbnail: '' });
@@ -56,6 +63,7 @@ export default function AdminPage() {
     }
   };
 
+  // Handle delete functionality
   const handleDelete = async (id: string) => {
     try {
       await axios.delete('/api/news', { data: { id } });
@@ -65,6 +73,7 @@ export default function AdminPage() {
     }
   };
 
+  // Handle edit button click
   const handleEdit = (news: any) => {
     setEditing(news.id);
     setFormData({
@@ -74,6 +83,7 @@ export default function AdminPage() {
     });
   };
 
+  // Fetch all news after submitting or deleting a news item
   const fetchNews = async () => {
     try {
       const response = await axios.get('/api/news');
@@ -102,8 +112,6 @@ export default function AdminPage() {
           placeholder="Content"
           value={formData.content}
           onChange={handleInputChange}
-          rows={25}  // Adjust rows for more space
-          cols={400}  // Adjust width for more space
         />
         <input
           type="text"

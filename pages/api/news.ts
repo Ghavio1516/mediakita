@@ -14,42 +14,45 @@ type News = {
 const getAllNews = async (): Promise<News[]> => {
   try {
     const [results] = await db.query('SELECT * FROM news ORDER BY createdAt DESC');
-    return results as News[];  // Menyusun hasil query ke dalam bentuk News[]
+    return results as News[];
   } catch (err) {
     throw new Error('Error fetching news: ' + err);
   }
 };
 
-// Mengambil berita berdasarkan ID (getNewsById)
-const getNewsById = async (id: string): Promise<News | null> => {
-  try {
-    const [results] = await db.query('SELECT * FROM news WHERE id = ?', [id]);
-    return results[0] ? (results[0] as News) : null;
-  } catch (err) {
-    throw new Error('Error fetching news by ID: ' + err);
-  }
-};
+const generateRandomId = (): string => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < 16; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
 
 // Menambah berita baru (addNews)
 const addNews = async (newsData: Omit<News, 'id' | 'createdAt'>): Promise<News> => {
-  try {
-    const { title, content, thumbnail } = newsData;
-    const [result] = await db.query<ResultSetHeader>(
-      'INSERT INTO news (title, content, thumbnail) VALUES (?, ?, ?)',
-      [title, content, thumbnail]
-    );
-    const newNews: News = {
-      id: result.insertId.toString(),  // Insert ID as string
-      title,
-      content,
-      thumbnail,
-      createdAt: new Date().toISOString(),
-    };
-    return newNews;
-  } catch (err) {
-    throw new Error('Error adding news: ' + err);
-  }
-};
+    try {
+      const { title, content, thumbnail } = newsData;
+      const generatedId = generateRandomId();  // Generate a random 16-character ID
+  
+      const [result] = await db.query<ResultSetHeader>(
+        'INSERT INTO news (id, title, content, thumbnail) VALUES (?, ?, ?, ?)',
+        [generatedId, title, content, thumbnail]
+      );
+      
+      const newNews: News = {
+        id: generatedId,
+        title,
+        content,
+        thumbnail,
+        createdAt: new Date().toISOString(),  // Use current timestamp
+      };
+  
+      return newNews;
+    } catch (err) {
+      throw new Error('Error adding news: ' + err);
+    }
+  };
 
 // Mengupdate berita berdasarkan ID (updateNews)
 const updateNews = async (id: string, newsData: Omit<News, 'id' | 'createdAt'>): Promise<News> => {
@@ -92,14 +95,17 @@ export default async function handler(req, res) {
         res.status(500).json({ error: err.message });
       }
       break;
-    case 'POST':
-      try {
-        const newNews = await addNews(req.body);
-        res.status(201).json(newNews);
-      } catch (err) {
-        res.status(500).json({ error: err.message });
-      }
-      break;
+
+      case 'POST':
+        try {
+          const newNews = await addNews(req.body);
+          res.status(201).json(newNews);  // Respond with the newly added news
+        } catch (err) {
+          console.error('Error adding news:', err);
+          res.status(500).json({ error: 'Failed to add news' });
+        }
+        break;
+
     case 'PUT':
       try {
         const updatedNews = await updateNews(req.body.id, req.body);
@@ -108,6 +114,7 @@ export default async function handler(req, res) {
         res.status(500).json({ error: err.message });
       }
       break;
+
     case 'DELETE':
       try {
         await deleteNews(req.body.id);
@@ -116,6 +123,7 @@ export default async function handler(req, res) {
         res.status(500).json({ error: err.message });
       }
       break;
+
     default:
       res.status(405).json({ error: 'Method Not Allowed' });
       break;

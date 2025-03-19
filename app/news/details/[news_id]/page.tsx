@@ -1,32 +1,71 @@
-// page.tsx or newsDetails.tsx
+"use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-export default function HomePage() {
-  const [news, setNews] = useState<any[]>([]);
+// Mendefinisikan tipe data untuk props
+interface NewsDetailsProps {
+  news: {
+    title: string;
+    thumbnail: string;
+    content: string;
+  } | null;
+}
+
+const NewsDetails = ({ params }: { params: { news_id: string } }) => {
+  const [news, setNews] = useState<NewsDetailsProps['news'] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchNews() {
+    const fetchNewsById = async (news_id: string) => {
       try {
-        const response = await fetch('/api/news');  // Mengambil data dari API route
-        const data = await response.json();
-        setNews(data);
-      } catch (error) {
-        console.error('Error fetching news:', error);
+        const res = await fetch(`/api/news/${news_id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setNews(data);
+        } else {
+          setError('News not found');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching news');
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (params.news_id) {
+      fetchNewsById(params.news_id);
     }
-    fetchNews();
-  }, []);
+  }, [params.news_id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!news) {
+    return <div>News not found</div>;
+  }
 
   return (
-    <div className="grid">
-      {news.map((item, index) => (
-        <div className="grid-item space-y-2" key={index}>
-          <img className="flex items-center justify-center w-full" src={item.thumbnail} alt={item.title} />
-          <h2>{item.title}</h2>
-          <p>{new Date(item.createdAt).toLocaleDateString()}</p>
-        </div>
-      ))}
+    <div className="space-y-8 py-8 px-6">
+      <h1 className="text-3xl font-bold text-center">{news.title}</h1>
+      <Image
+        src={news.thumbnail}
+        alt={news.title}
+        width={1920}
+        height={1080}
+        className="mx-auto max-w-[80vw] h-[500px] object-cover rounded-2xl"
+      />
+      <div className="max-w-[80vw] mx-auto">
+        <p className="text-center">{news.content}</p>
+      </div>
     </div>
   );
-}
+};
+
+export default NewsDetails;

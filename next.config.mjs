@@ -4,7 +4,11 @@ export default {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'ichef.bbci.co.uk',  // Domain yang diizinkan
+        hostname: 'ichef.bbci.co.uk', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.discordapp.com',
       },
     ],
   },
