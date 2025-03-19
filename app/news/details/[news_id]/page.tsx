@@ -39,6 +39,17 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
     }
   }, [params.news_id]);
 
+  // Function to format the content with paragraph breaks and proper spacing
+  const formatContent = (content: string) => {
+    // Replace multiple spaces and tabs with a single space
+    const formattedContent = content.replace(/\s+/g, ' ').trim();
+
+    // Split content by newlines and wrap each section in <p> tags
+    return formattedContent.split('\n').map((paragraph, index) => (
+      <p key={index}>{paragraph}</p>
+    ));
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -62,7 +73,8 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
         className="mx-auto max-w-[80vw] h-[500px] object-cover rounded-2xl"
       />
       <div className="max-w-[80vw] mx-auto">
-        <p className="text-center">{news.content}</p>
+        {/* Format and render content with paragraphs */}
+        {formatContent(news.content)}
       </div>
     </div>
   );
