@@ -39,15 +39,18 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
     }
   }, [params.news_id]);
 
-  // Function to handle the content formatting (replacing \n with <br />)
+  // Function to handle the content formatting (replacing \n with <br /> and removing \n)
   const formatContent = (content: string) => {
-    // Replace the \n characters with <br /> for line breaks
+    // Step 1: Replace the \n characters with <br /> for line breaks
     const formattedContent = content.split('\n').map((line, index) => {
+      // Remove the \n character after splitting
+      if (line.trim() === '') {
+        return <br key={index} />; // Add line break for empty lines
+      }
       return (
-        <React.Fragment key={index}>
+        <p key={index} style={{ marginBottom: '24px', whiteSpace: 'pre-wrap' }}>
           {line}
-          <br />
-        </React.Fragment>
+        </p>
       );
     });
 
