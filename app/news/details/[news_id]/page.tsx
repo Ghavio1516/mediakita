@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 // Mendefinisikan tipe data untuk props
 interface NewsDetailsProps {
@@ -39,19 +38,19 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
     }
   }, [params.news_id]);
 
-  // Function to handle the content formatting (replacing \n with <br />)
+  // Function to handle rich text content rendering
   const formatContent = (content: string) => {
-    // Replace the \n characters with <br /> for line breaks
-    const formattedContent = content.split('\n').map((line, index) => {
-      return (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
-      );
-    });
+    // Create a div element to parse HTML content
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
 
-    return formattedContent;
+    // Return the content as dangerouslySetInnerHTML
+    return (
+      <div
+        className="prose prose-lg max-w-none"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   };
 
   if (loading) {
@@ -69,11 +68,9 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
   return (
     <div className="space-y-8 py-8 px-6">
       <h1 className="text-3xl font-bold text-center">{news.title}</h1>
-      <Image
+      <img
         src={news.thumbnail}
         alt={news.title}
-        width={1920}
-        height={1080}
         className="mx-auto max-w-[80vw] h-[500px] object-cover rounded-2xl"
       />
       <div className="max-w-[80vw] mx-auto">
