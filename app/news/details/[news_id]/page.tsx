@@ -75,7 +75,7 @@ const NewsDetails = ({ params }: { params: { news_id: string } }) => {
       />
       <div className="max-w-[80vw] mx-auto">
         {/* Format and render content with line breaks */}
-        <div className="text-center">{formatContent(news.content)}</div>
+        <div>{formatContent(news.content)}</div>
       </div>
     </div>
   );
