@@ -9,6 +9,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
   loading: () => <p>Loading editor...</p>
 });
 
+
 export default function AdminPage() {
   const [isLocked, setIsLocked] = useState(true);
   const [password, setPassword] = useState('');
