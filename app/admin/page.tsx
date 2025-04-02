@@ -9,12 +9,7 @@ const ReactQuill = dynamic(() => import('react-quill'), {
   loading: () => <p>Loading editor...</p>
 });
 
-
 export default function AdminPage() {
-  const [isLocked, setIsLocked] = useState(true);
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
   // State for the form inputs
   const [formData, setFormData] = useState({
     title: '',
@@ -50,44 +45,6 @@ export default function AdminPage() {
   useEffect(() => {
     fetchNews();
   }, []);
-
-  const handleUnlock = () => {
-    if (password === 'mediakita2025') {
-      setIsLocked(false);
-      setError('');
-    } else {
-      setError('Invalid password');
-    }
-  };
-
-  if (isLocked) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-96">
-          <h2 className="text-2xl font-bold mb-6 text-center">Admin Access</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter password"
-              />
-              {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-            </div>
-            <button
-              onClick={handleUnlock}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
-            >
-              Unlock
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Handle input changes in the form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -219,8 +176,8 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">Admin Panel - Manage News</h1>
+    <div className="max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-8">News Management</h1>
       
       <div className="mb-8">
         <button 
@@ -277,22 +234,35 @@ export default function AdminPage() {
           />
           {errors.thumbnail && <p className="text-red-500 text-sm mt-1">{errors.thumbnail}</p>}
         </div>
-        <button 
-          type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded"
-        >
-          {editing ? 'Update News' : 'Add News'}
-        </button>
+        <div className="flex space-x-4">
+          <button 
+            type="submit"
+            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded"
+          >
+            {editing ? 'Update News' : 'Add News'}
+          </button>
+          {editing && (
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(null);
+                setFormData({ title: '', content: '', thumbnail: '' });
+                setErrors({ title: '', content: '', thumbnail: '' });
+              }}
+              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
 
       {/* News List */}
-      <div>
+      <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">Loading news...</p>
-          </div>
+          <div className="p-4 text-center">Loading news...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             {newsList.map((news) => (
               <div key={news.id} className="bg-white rounded-lg shadow overflow-hidden">
                 <img 

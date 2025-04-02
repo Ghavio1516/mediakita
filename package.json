@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@prisma/extension-accelerate": "^1.2.2",
+    "@vercel/postgres": "^0.10.0",
     "axios": "^1.8.3",
+    "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.7",
     "mysql2": "^3.13.0",
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/bcryptjs": "^3.0.0",
     "@types/dotenv": "^8.2.3",
     "@types/node": "^22.13.5",
     "@types/react": "^19.0.10",
