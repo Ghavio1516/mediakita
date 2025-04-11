@@ -31,7 +31,7 @@ CREATE TABLE `users` (
 
 -- Memasukkan data contoh admin
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `createdAt`) VALUES
-('usr_01', 'admin', 'admin@mediakita.com', '$2b$10$YourHashedPasswordHere', 'admin', '2024-02-27 13:00:23.381');
+('usr_01', 'admin', 'admin@mediakita.com', '$2b$10$5ihOm.Dixqi.xWHRALcaruesi9axgZl2wYpcAPdaPBVl0ChdvT.Ka', 'admin', '2024-02-27 13:00:23.381');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
