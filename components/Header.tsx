@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -16,7 +16,12 @@ export default function Header() {
           {/* Hapus <a> di dalam Link */}
           <span className="active">Home</span>
         </Link>
-        <a href="#">Hot News</a>
+        <Link href="/news">
+          <span>Hot News</span>
+        </Link>
+        <Link href="/pricelist">
+          <span>Price List</span>
+        </Link>
         <a href="#">Entertainment</a>
       </nav>
     </header>
