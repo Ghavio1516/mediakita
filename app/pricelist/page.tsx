@@ -33,110 +33,110 @@ const PricelistPage = () => {
       {
         lokasi: "Banco Pelabuhan",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "BJM",
         jenis: "Landscape",
-        harga: "1.200.000",
-        hargaPajak: "1.260.000",
+        harga: "$1.200.000",
+        hargaPajak: "$1.260.000",
       },
       {
         lokasi: "DEM",
         jenis: "Landscape",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
       {
         lokasi: "EMS",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Euphoria",
         jenis: "Portrait",
-        harga: "1.200.000",
-        hargaPajak: "1.260.000",
+        harga: "$1.200.000",
+        hargaPajak: "$1.260.000",
       },
       {
         lokasi: "Garasi Kota",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Jembatan Keywood",
         jenis: "Landscape",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
       {
         lokasi: "Kantor Media",
         jenis: "Landscape",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
       {
         lokasi: "Kantor Polisi",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Karnaval",
         jenis: "Portrait",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
       {
         lokasi: "Kellys",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Pelabuhan",
         jenis: "Landscape",
-        harga: "2.500.000",
-        hargaPajak: "2.625.000",
+        harga: "$2.500.000",
+        hargaPajak: "$2.625.000",
       },
       {
         lokasi: "Pelabuhan",
         jenis: "Portrait",
-        harga: "3.500.000",
-        hargaPajak: "3.675.000",
+        harga: "$3.500.000",
+        hargaPajak: "$3.675.000",
       },
       {
         lokasi: "Pemerintah",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "QQ",
         jenis: "Landscape",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
       {
         lokasi: "Spawn Paleto",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Spawn SS",
         jenis: "Landscape",
-        harga: "2.000.000",
-        hargaPajak: "2.100.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Top Speed",
         jenis: "Landscape",
-        harga: "1.500.000",
-        hargaPajak: "1.575.000",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
       },
     ],
     photo: [
@@ -144,35 +144,35 @@ const PricelistPage = () => {
         namaPaket: "Paket 1",
         jenisSesi: "Solo Session / Couple Session",
         keterangan: "1 Sesi, 1 Venue, 1 Hour",
-        harga: "2.0 M",
+        harga: "$2.0 M",
       },
       {
         namaPaket: "Paket 2",
         jenisSesi: "Solo Session / Couple Session",
         keterangan: "2 Sesi, 2 Venue, 2 Hour",
-        harga: "3.5 M",
+        harga: "$3.5 M",
       },
       {
         namaPaket: "Paket 3",
         jenisSesi: "Fam Session / Group Session",
         keterangan: "1 Sesi, 1 Venue, 1 Hour",
-        harga: "3.0 M",
+        harga: "$3.0 M",
       },
       {
         namaPaket: "Paket 4",
         jenisSesi: "Fam Session / Group Session",
         keterangan: "2 Sesi, 2 Venue, 2 Hour",
-        harga: "4 M",
+        harga: "$4 M",
       },
     ],
     soloVideo: [
       {
         durasi: "30s",
-        harga: "8 - 10 M",
+        harga: "$8 - 10 M",
       },
       {
         durasi: "1 Min",
-        harga: "10 - 16 M",
+        harga: "$10 - 16 M",
       },
       {
         durasi: "2 Min",
@@ -183,62 +183,62 @@ const PricelistPage = () => {
       {
         service: "Short Video (10-30 detik)",
         description: "Video pendek untuk konten sosial media",
-        price: "Rp 1.000.000 - 1.500.000",
+        price: "$1.000.000 - 1.500.000",
       },
       {
         service: "Konsep",
         description: "Additional Fee - Pembuatan konsep video",
-        price: "Rp 1.000.000",
+        price: "$1.000.000",
       },
       {
         service: "Penambahan durasi",
         description: "Additional Fee - Per 15 detik",
-        price: "Rp 300.000",
+        price: "$300.000",
       },
       {
         service: "Penambahan talent",
         description: "Additional Fee - Per 1 orang",
-        price: "Rp 200.000",
+        price: "$200.000",
       },
     ],
     design: [
       {
         service: "Banner Billboard",
         description: "Design banner untuk billboard",
-        price: "Rp 600.000",
+        price: "$600.000",
       },
       {
         service: "Undangan (Ultah, Nikah, Event)",
         description: "Design undangan untuk berbagai acara",
-        price: "Rp 500.000",
+        price: "$500.000",
       },
     ],
     liputan: [
       {
         paket: "Paket Tablet Only",
-        harga: "Rp 350.000",
+        harga: "$350.000",
       },
       {
         paket: "Paket Live Report Only (Berita Langit)",
-        harga: "Rp 500.000",
+        harga: "$500.000",
       },
       {
         paket: "Paket Premium (Berita Tablet + Live Report)",
-        harga: "Rp 1.000.000",
+        harga: "$1.000.000",
       },
     ],
     iklan: [
       {
         paket: "Paket Basic (Berita Langit)",
-        harga: "Rp 300.000",
+        harga: "$300.000",
       },
       {
         paket: "Paket Premium (Berita Langit + Billboard)",
-        harga: "Rp 1.750.000",
+        harga: "$1.750.000",
       },
       {
         paket: "Paket Exclusive (Berita Langit + Billboard + Pamflet)",
-        harga: "Rp 1.850.000",
+        harga: "$1.850.000",
       },
     ],
     iklanNotes: [
@@ -309,10 +309,10 @@ const PricelistPage = () => {
                         {item.jenis}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rp {item.harga}
+                        {item.harga}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rp {item.hargaPajak}
+                        {item.hargaPajak}
                       </td>
                     </tr>
                   ))}
