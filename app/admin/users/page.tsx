@@ -199,6 +199,7 @@ export default function UserManagement() {
           >
             <option value="user">User</option>
             <option value="admin">Admin</option>
+            <option value="disnaker">Disnaker</option>
           </select>
           {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role}</p>}
         </div>

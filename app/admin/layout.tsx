@@ -13,6 +13,7 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -27,12 +28,20 @@ export default function AdminLayout({
         }
 
         const data = await response.json();
-        if (data.role !== 'admin') {
+        if (data.role !== 'admin' && data.role !== 'disnaker') {
           router.push('/login');
           return;
         }
 
+        setUserRole(data.role);
         setIsAuthenticated(true);
+
+        // Redirect disnaker role to /admin/disnaker
+        if (data.role === 'disnaker' && pathname === '/admin') {
+          router.push('/admin/disnaker');
+          return;
+        }
+
       } catch (error) {
         console.error('Auth check failed:', error);
         router.push('/login');
@@ -40,7 +49,7 @@ export default function AdminLayout({
     };
 
     checkAuth();
-  }, [router]);
+  }, [router, pathname]);
 
   const handleLogout = async () => {
     try {
@@ -64,31 +73,48 @@ export default function AdminLayout({
         <img src="/mediakitalogo.png" alt="Media Kita Logo" className="w-full h-12 object-contain" />
         </div>
         <nav className="mt-6 px-4">
+          {userRole === 'admin' && (
+            <>
+              <Link 
+                href="/admin"
+                className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-all duration-200 ${
+                  pathname === '/admin' 
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z" />
+                </svg>
+                News
+              </Link>
+              <Link 
+                href="/admin/users"
+                className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-all duration-200 ${
+                  pathname === '/admin/users'
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                User
+              </Link>
+            </>
+          )}
           <Link 
-            href="/admin"
+            href="/admin/disnaker"
             className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-all duration-200 ${
-              pathname === '/admin' 
+              pathname === '/admin/disnaker'
                 ? 'bg-blue-50 text-blue-600'
                 : 'text-gray-600 hover:bg-gray-50'
             }`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            News
-          </Link>
-          <Link 
-            href="/admin/users"
-            className={`flex items-center px-4 py-3 mb-2 rounded-lg transition-all duration-200 ${
-              pathname === '/admin/users'
-                ? 'bg-blue-50 text-blue-600'
-                : 'text-gray-600 hover:bg-gray-50'
-            }`}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            User
+            Disnaker
           </Link>
         </nav>
         <div className="absolute bottom-0 w-full p-6">

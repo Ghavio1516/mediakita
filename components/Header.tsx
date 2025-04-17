@@ -16,13 +16,20 @@ export default function Header() {
           {/* Hapus <a> di dalam Link */}
           <span className="active">Home</span>
         </Link>
-        <Link href="/news">
-          <span>Hot News</span>
+        <Link href="/disnaker">
+          {/* Hapus <a> di dalam Link */}
+          <span>Info Disnaker</span>
         </Link>
+        {/* <Link href="/news">
+          <span>Hot News</span>
+        </Link> */}
         <Link href="/pricelist">
           <span>Price List</span>
         </Link>
-        <a href="#">Entertainment</a>
+        <Link href="/login">
+          <span>Login</span>
+        </Link>
+        {/* <a href="#">Entertainment</a> */}
       </nav>
     </header>
   );

@@ -31,7 +31,7 @@ const PricelistPage = () => {
   const pricelistData = {
     billboard: [
       {
-        lokasi: "Banco Pelabuhan",
+        lokasi: "Binco Pelabuhan",
         jenis: "Landscape",
         harga: "$2.000.000",
         hargaPajak: "$2.100.000",
@@ -43,7 +43,7 @@ const PricelistPage = () => {
         hargaPajak: "$1.260.000",
       },
       {
-        lokasi: "DEM",
+        lokasi: "DHM",
         jenis: "Landscape",
         harga: "$1.500.000",
         hargaPajak: "$1.575.000",
@@ -67,7 +67,7 @@ const PricelistPage = () => {
         hargaPajak: "$2.100.000",
       },
       {
-        lokasi: "Jembatan Keywood",
+        lokasi: "Jembatan Roxwood",
         jenis: "Landscape",
         harga: "$1.500.000",
         hargaPajak: "$1.575.000",
@@ -87,8 +87,8 @@ const PricelistPage = () => {
       {
         lokasi: "Karnaval",
         jenis: "Portrait",
-        harga: "$1.500.000",
-        hargaPajak: "$1.575.000",
+        harga: "$2.000.000",
+        hargaPajak: "$2.100.000",
       },
       {
         lokasi: "Kellys",
@@ -219,7 +219,7 @@ const PricelistPage = () => {
         harga: "$350.000",
       },
       {
-        paket: "Paket Live Report Only (Berita Langit)",
+        paket: "Paket Live Report Only (Broadcast)",
         harga: "$500.000",
       },
       {
@@ -229,15 +229,15 @@ const PricelistPage = () => {
     ],
     iklan: [
       {
-        paket: "Paket Basic (Berita Langit)",
+        paket: "Paket Basic (Broadcast)",
         harga: "$300.000",
       },
       {
-        paket: "Paket Premium (Berita Langit + Billboard)",
+        paket: "Paket Premium (Broadcast + Billboard)",
         harga: "$1.750.000",
       },
       {
-        paket: "Paket Exclusive (Berita Langit + Billboard + Pamflet)",
+        paket: "Paket Exclusive (Broadcast + Billboard + Pamflet)",
         harga: "$1.850.000",
       },
     ],
