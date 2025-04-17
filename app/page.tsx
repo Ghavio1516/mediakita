@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { useEffect, useState } from "react";
-import Carousel from "../components/Carousel";
+import Carousel from "./components/Carousel";
 
 export default function HomePage() {
   const [news, setNews] = useState<any[]>([]);
