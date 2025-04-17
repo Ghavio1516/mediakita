@@ -92,7 +92,7 @@ export default function LoginPage() {
           <div>
             <button
               type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out text-base font-medium shadow-lg hover:shadow-xl"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-white bg-red-800 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-700 transition duration-150 ease-in-out text-base font-medium shadow-lg hover:shadow-xl"
             >
               Sign in
             </button>
