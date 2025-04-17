@@ -57,7 +57,7 @@ const Carousel = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-[400px] bg-gray-100 animate-pulse flex items-center justify-center">
+      <div className="w-full aspect-[1748/1240] max-h-[500px] flex items-center justify-center">
         <div className="text-gray-400">Loading...</div>
       </div>
     );
@@ -68,64 +68,66 @@ const Carousel = () => {
   }
 
   return (
-    <div
-      className="relative w-full h-[400px] overflow-hidden group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className="w-full mx-auto">
       <div
-        className="absolute w-full h-full flex transition-transform duration-500 ease-out"
-        style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+        className="relative aspect-[1748/1240] max-h-[500px] overflow-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {banners.map((banner) => (
-          <div key={banner.id} className="w-full h-full flex-shrink-0 relative">
-            <img
-              src={banner.image_url}
-              alt={banner.title || 'Banner'}
-              className="w-full h-full object-cover"
-            />
-            
-          </div>
-        ))}
-      </div>
-
-      {/* Navigation Arrows */}
-      {banners.length > 1 && (
-        <>
-          <button
-            onClick={prevImage}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/30 hover:bg-white/50 flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            aria-label="Previous slide"
-          >
-            <FiChevronLeft className="w-6 h-6 text-white" />
-          </button>
-          <button
-            onClick={nextImage}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/30 hover:bg-white/50 flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            aria-label="Next slide"
-          >
-            <FiChevronRight className="w-6 h-6 text-white" />
-          </button>
-        </>
-      )}
-
-      {/* Slide Indicators */}
-      {banners.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentImageIndex
-                  ? 'bg-white w-6'
-                  : 'bg-white/50 hover:bg-white/75'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
+        <div
+          className="absolute w-full h-full flex transition-transform duration-700 ease-out"
+          style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+        >
+          {banners.map((banner) => (
+            <div key={banner.id} className="w-full h-full flex-shrink-0 relative">
+              <img
+                src={banner.image_url}
+                alt={banner.title || 'Banner'}
+                className="w-full h-full object-contain"
+                style={{ aspectRatio: '1748/1240' }}
+              />
+            </div>
           ))}
         </div>
-      )}
+
+        {/* Navigation Arrows */}
+        {banners.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md opacity-100 z-10"
+              aria-label="Previous slide"
+            >
+              <FiChevronLeft className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md opacity-100 z-10"
+              aria-label="Next slide"
+            >
+              <FiChevronRight className="w-5 h-5 text-white" />
+            </button>
+          </>
+        )}
+
+        {/* Slide Indicators */}
+        {banners.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  index === currentImageIndex 
+                    ? 'w-6 bg-white' 
+                    : 'w-3 bg-white/50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
