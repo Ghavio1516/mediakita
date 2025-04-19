@@ -20,6 +20,9 @@ export default function Header() {
           {/* Hapus <a> di dalam Link */}
           <span>Info Disnaker</span>
         </Link>
+        <Link href="/live">
+          <span>Live</span>
+        </Link>
         {/* <Link href="/news">
           <span>Hot News</span>
         </Link> */}
