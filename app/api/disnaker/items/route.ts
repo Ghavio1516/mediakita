@@ -34,9 +34,9 @@ export async function GET() {
 // POST new item
 export async function POST(request: Request) {
   try {
-    const { categoryId, name, price, unit, status } = await request.json();
+    const { categoryId, name, selling_price, buying_price, unit, status } = await request.json();
     
-    if (!categoryId || !name || !price || !unit) {
+    if (!categoryId || !name || !selling_price || !buying_price || !unit) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
@@ -50,8 +50,8 @@ export async function POST(request: Request) {
     const id = `item_${nanoid(10)}`;
     
     await connection.execute(
-      'INSERT INTO disnaker_items (id, categoryId, name, price, unit, status) VALUES (?, ?, ?, ?, ?, ?)',
-      [id, categoryId, name, price, unit, status]
+      'INSERT INTO disnaker_items (id, categoryId, name, selling_price, buying_price, unit, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [id, categoryId, name, selling_price, buying_price, unit, status]
     );
 
     await connection.end();
@@ -65,9 +65,9 @@ export async function POST(request: Request) {
 // PUT update item
 export async function PUT(request: Request) {
   try {
-    const { id, name, price, unit, status } = await request.json();
+    const { id, name, selling_price, buying_price, unit, status } = await request.json();
     
-    if (!id || !name || !price || !unit || !status) {
+    if (!id || !name || !selling_price || !buying_price || !unit || !status) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
@@ -79,8 +79,8 @@ export async function PUT(request: Request) {
     });
 
     await connection.execute(
-      'UPDATE disnaker_items SET name = ?, price = ?, unit = ?, status = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
-      [name, price, unit, status, id]
+      'UPDATE disnaker_items SET name = ?, selling_price = ?, buying_price = ?, unit = ?, status = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ?',
+      [name, selling_price, buying_price, unit, status, id]
     );
 
     await connection.end();

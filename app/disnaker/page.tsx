@@ -6,7 +6,8 @@ interface DisnakerItem {
   id: string;
   categoryId: string;
   name: string;
-  price: number;
+  selling_price: number;
+  buying_price: number;
   unit: string;
   status: 'available' | 'limited' | 'unavailable';
 }
@@ -91,7 +92,7 @@ export default function DisnakerPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <span>🟢</span>
-                <p>SEDANG DIJUAL</p>
+                <p>SEDANG MENERIMA</p>
               </div>
               <div className="flex items-center gap-3">
                 <span>🟡</span>
@@ -125,17 +126,32 @@ export default function DisnakerPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p
-                          className={`text-xl font-bold ${
-                            item.status === 'available'
-                              ? 'text-green-500'
-                              : item.status === 'limited'
-                              ? 'text-yellow-500'
-                              : 'text-red-500'
-                          }`}
-                        >
-                          ${item.price}
-                        </p>
+                        <div className="flex flex-col gap-1">
+                          <p className="text-sm text-gray-400">Harga Jual:</p>
+                          <p
+                            className={`text-xl font-bold ${
+                              item.status === 'available'
+                                ? 'text-green-500'
+                                : item.status === 'limited'
+                                ? 'text-yellow-500'
+                                : 'text-red-500'
+                            }`}
+                          >
+                            ${item.selling_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </p>
+                          <p className="text-sm text-gray-400">Harga Beli:</p>
+                          <p
+                            className={`text-lg font-bold ${
+                              item.status === 'available'
+                                ? 'text-green-400'
+                                : item.status === 'limited'
+                                ? 'text-yellow-400'
+                                : 'text-red-400'
+                            }`}
+                          >
+                            ${item.buying_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}

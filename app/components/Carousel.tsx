@@ -14,7 +14,6 @@ const Carousel = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     fetchBanners();
@@ -46,14 +45,14 @@ const Carousel = () => {
   };
 
   useEffect(() => {
-    if (banners.length > 0 && !isHovered) {
+    if (banners.length > 0) {
       const interval = setInterval(() => {
         setCurrentImageIndex((prevIndex) => (prevIndex + 1) % banners.length);
       }, 5000);
 
       return () => clearInterval(interval);
     }
-  }, [banners.length, isHovered]);
+  }, [banners.length]);
 
   if (loading) {
     return (
@@ -70,9 +69,7 @@ const Carousel = () => {
   return (
     <div className="w-full max-w-[1748px] mx-auto px-4 my-6">
       <div
-        className="relative aspect-[1748/620] overflow-hidden rounded-2xl shadow-2xl group bg-gray-900"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className="relative aspect-[1748/620] overflow-hidden rounded-2xl shadow-2xl bg-gray-900"
       >
         {/* Progress Bar */}
         <div className="absolute top-0 left-0 w-full h-1 bg-white/10 z-20">
@@ -91,7 +88,7 @@ const Carousel = () => {
               <img
                 src={banner.image_url}
                 alt={banner.title || 'Banner'}
-                className="w-full h-full object-cover object-center transform transition-transform duration-500 scale-105 group-hover:scale-100"
+                className="w-full h-full object-cover object-center"
                 style={{ 
                   imageRendering: 'crisp-edges',
                   aspectRatio: '1748/620'
@@ -107,14 +104,14 @@ const Carousel = () => {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/40 flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-4 group-hover:translate-x-0 z-10 border border-white/10"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md z-10 border border-white/10"
               aria-label="Previous slide"
             >
               <FiChevronLeft className="w-6 h-6 text-white" />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/40 flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 z-10 border border-white/10"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 flex items-center justify-center backdrop-blur-md z-10 border border-white/10"
               aria-label="Next slide"
             >
               <FiChevronRight className="w-6 h-6 text-white" />
@@ -132,7 +129,7 @@ const Carousel = () => {
                 className={`h-1.5 rounded-full transition-all duration-500 ${
                   index === currentImageIndex 
                     ? 'w-8 bg-white' 
-                    : 'w-4 bg-white/40 hover:bg-white/60'
+                    : 'w-4 bg-white/40'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -141,7 +138,7 @@ const Carousel = () => {
         )}
 
         {/* Current Slide Number */}
-        <div className="absolute top-6 right-6 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full z-10 text-white/90 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute top-6 right-6 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full z-10 text-white/90 text-sm font-medium">
           {currentImageIndex + 1} / {banners.length}
         </div>
       </div>

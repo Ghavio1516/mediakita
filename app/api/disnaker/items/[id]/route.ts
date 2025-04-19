@@ -71,14 +71,15 @@ export async function PUT(
     // Merge current data with updates
     const updatedData = {
       name: updates.name ?? currentItem.name,
-      price: updates.price ?? currentItem.price,
+      selling_price: updates.selling_price ?? currentItem.selling_price,
+      buying_price: updates.buying_price ?? currentItem.buying_price,
       unit: updates.unit ?? currentItem.unit,
       status: updates.status ?? currentItem.status
     };
 
     const [result] = await connection.execute(
-      'UPDATE disnaker_items SET name = ?, price = ?, unit = ?, status = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ? AND isActive = 1',
-      [updatedData.name, updatedData.price, updatedData.unit, updatedData.status, id]
+      'UPDATE disnaker_items SET name = ?, selling_price = ?, buying_price = ?, unit = ?, status = ?, updatedAt = CURRENT_TIMESTAMP WHERE id = ? AND isActive = 1',
+      [updatedData.name, updatedData.selling_price, updatedData.buying_price, updatedData.unit, updatedData.status, id]
     );
 
     await connection.end();

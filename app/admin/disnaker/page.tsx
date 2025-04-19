@@ -6,7 +6,8 @@ interface DisnakerItem {
   id: string;
   categoryId: string;
   name: string;
-  price: number;
+  selling_price: number;
+  buying_price: number;
   unit: string;
   status: 'available' | 'limited' | 'unavailable';
 }
@@ -20,7 +21,8 @@ interface DisnakerCategory {
 interface NewItem {
   categoryId: string;
   name: string;
-  price: number | '';
+  selling_price: number | '';
+  buying_price: number | '';
   unit: string;
   status: 'available' | 'limited' | 'unavailable';
 }
@@ -40,13 +42,14 @@ export default function DisnakerAdminPage() {
   const [newItem, setNewItem] = useState<NewItem>({
     categoryId: '',
     name: '',
-    price: '',
+    selling_price: '',
+    buying_price: '',
     unit: '',
     status: 'available'
   });
 
   const statusOptions: StatusOption[] = [
-    { value: 'available', label: 'Sedang Dijual', icon: '🟢' },
+    { value: 'available', label: 'Sedang Menerima', icon: '🟢' },
     { value: 'limited', label: 'Stock Gudang Hampir Penuh', icon: '🟡' },
     { value: 'unavailable', label: 'Tidak Menerima / Stock Gudang Penuh', icon: '🔴' }
   ];
@@ -72,7 +75,7 @@ export default function DisnakerAdminPage() {
 
   const handleAddItem = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newItem.categoryId || !newItem.name || !newItem.price || !newItem.unit) {
+    if (!newItem.categoryId || !newItem.name || !newItem.selling_price || !newItem.buying_price || !newItem.unit) {
       alert('Semua field harus diisi');
       return;
     }
@@ -82,7 +85,8 @@ export default function DisnakerAdminPage() {
       setNewItem({
         categoryId: '',
         name: '',
-        price: '',
+        selling_price: '',
+        buying_price: '',
         unit: '',
         status: 'available'
       });
@@ -110,7 +114,8 @@ export default function DisnakerAdminPage() {
     try {
       await axios.put(`/api/disnaker/items/${item.id}`, {
         name: item.name,
-        price: item.price,
+        selling_price: item.selling_price,
+        buying_price: item.buying_price,
         unit: item.unit,
         status: item.status
       });
@@ -199,12 +204,26 @@ export default function DisnakerAdminPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Harga ($)
+                    Harga Jual ($)
                   </label>
                   <input
                     type="number"
-                    value={newItem.price}
-                    onChange={(e) => setNewItem({ ...newItem, price: e.target.value ? Number(e.target.value) : '' })}
+                    value={newItem.selling_price}
+                    onChange={(e) => setNewItem({ ...newItem, selling_price: e.target.value ? Number(e.target.value) : '' })}
+                    className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Harga Beli ($)
+                  </label>
+                  <input
+                    type="number"
+                    value={newItem.buying_price}
+                    onChange={(e) => setNewItem({ ...newItem, buying_price: e.target.value ? Number(e.target.value) : '' })}
                     className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500"
                     min="0"
                     step="0.01"
@@ -253,7 +272,8 @@ export default function DisnakerAdminPage() {
                     <th className="px-4 py-2 text-left">Status</th>
                     <th className="px-4 py-2 text-left">Nama Barang</th>
                     <th className="px-4 py-2 text-left">Satuan</th>
-                    <th className="px-4 py-2 text-right">Harga</th>
+                    <th className="px-4 py-2 text-right">Harga Jual</th>
+                    <th className="px-4 py-2 text-right">Harga Beli</th>
                     <th className="px-4 py-2 text-center">Aksi</th>
                   </tr>
                 </thead>
@@ -305,15 +325,31 @@ export default function DisnakerAdminPage() {
                           {editingItem?.id === item.id ? (
                             <input
                               type="number"
-                              value={editingItem.price}
-                              onChange={(e) => setEditingItem({ ...editingItem, price: Number(e.target.value) })}
+                              value={editingItem.selling_price}
+                              onChange={(e) => setEditingItem({ ...editingItem, selling_price: Number(e.target.value) })}
                               className="w-32 px-2 py-1 border rounded text-right"
                               min="0"
                               step="0.01"
                             />
                           ) : (
                             <span className="hover:text-blue-600 cursor-pointer" onClick={() => setEditingItem(item)}>
-                              $ {item.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              $ {item.selling_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-2 text-right">
+                          {editingItem?.id === item.id ? (
+                            <input
+                              type="number"
+                              value={editingItem.buying_price}
+                              onChange={(e) => setEditingItem({ ...editingItem, buying_price: Number(e.target.value) })}
+                              className="w-32 px-2 py-1 border rounded text-right"
+                              min="0"
+                              step="0.01"
+                            />
+                          ) : (
+                            <span className="hover:text-blue-600 cursor-pointer" onClick={() => setEditingItem(item)}>
+                              $ {item.buying_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                           )}
                         </td>
