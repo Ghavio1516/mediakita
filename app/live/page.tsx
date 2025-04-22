@@ -161,13 +161,13 @@ export default function LivePage() {
   const handleSubmitComment = async (e: React.FormEvent) => {
     setUsername(tempUsername);
     e.preventDefault();
-    if (!stream?.id || !newComment.trim() || !username.trim()) return;
+    if (!stream?.id || !newComment.trim() || !tempUsername.trim()) return;
 
     try {
       const comment: Comment = {
         id: Math.random().toString(36).substr(2, 9),
         userId: Math.random().toString(36).substr(2, 9),
-        username: username.trim(),
+        username: tempUsername.trim(),
         message: newComment.trim(),
         timestamp: Date.now(),
       };
