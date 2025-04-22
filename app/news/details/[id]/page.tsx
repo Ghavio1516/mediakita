@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Image from "next/image";
 import NewsComments from "../../../components/NewsComments";
 
 interface NewsDetail {
@@ -59,12 +58,10 @@ export default function NewsDetailPage({ params }: { params: { id: string } }) {
         {/* News Content */}
         <article className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
           <div className="relative aspect-video">
-            <Image
+            <img
               src={news.thumbnail}
               alt={news.title}
-              fill
-              className="object-cover"
-              priority
+              className="object-cover w-full h-full"
             />
           </div>
           <div className="p-6">
