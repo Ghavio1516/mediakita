@@ -23,6 +23,7 @@ export default function LivePage() {
   const [error, setError] = useState<string | null>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
   const viewerRefCleanup = useRef<(() => void) | null>(null);
+  const hasJoinedRef = useRef(false);
 
   useEffect(() => {
     fetchStream();
@@ -48,8 +49,10 @@ export default function LivePage() {
     if (!stream?.id) return;
 
     const handleBeforeUnload = () => {
-      const viewersRef = ref(database, `streams/${stream.id}/viewers`);
-      set(viewersRef, increment(-1));
+      if (hasJoinedRef.current) {
+        const viewersRef = ref(database, `streams/${stream.id}/viewers`);
+        set(viewersRef, increment(-1));
+      }
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -79,18 +82,24 @@ export default function LivePage() {
 
       // Set up viewer count with disconnect handling
       const viewersRef = ref(database, `streams/${stream.id}/viewers`);
+      const currentViewers = (await get(viewersRef)).val() || 0;
 
-      // Increment viewer count when joining
-      await set(viewersRef, increment(1));
+      // Only increment if we haven't joined yet
+      if (!hasJoinedRef.current) {
+        await set(viewersRef, Math.max(0, currentViewers) + 1);
+        hasJoinedRef.current = true;
+      }
 
       // Set up automatic cleanup when client disconnects
       const onDisconnectRef = onDisconnect(viewersRef);
-      await onDisconnectRef.set(snapshot.val()?.viewers ? increment(-1) : 0);
+      await onDisconnectRef.set(Math.max(0, currentViewers));
 
       // Store cleanup function
       viewerRefCleanup.current = () => {
         onDisconnectRef.cancel();
-        set(viewersRef, increment(-1));
+        if (hasJoinedRef.current) {
+          set(viewersRef, Math.max(0, currentViewers));
+        }
       };
 
       console.log("Viewer tracking initialized");
@@ -110,7 +119,7 @@ export default function LivePage() {
         const data = snapshot.val();
         if (data) {
           const commentsList = Object.values(data) as Comment[];
-          setComments(commentsList.sort((a, b) => b.timestamp - a.timestamp));
+          setComments(commentsList.sort((a, b) => a.timestamp - b.timestamp));
         } else {
           setComments([]);
         }
@@ -119,7 +128,7 @@ export default function LivePage() {
       // Listen for viewer count
       const viewersRef = ref(database, `streams/${stream.id}/viewers`);
       const unsubscribeViewers = onValue(viewersRef, (snapshot) => {
-        const viewerCount = snapshot.val() || 0;
+        const viewerCount = Math.max(0, snapshot.val() || 0);
         console.log("Current viewer count:", viewerCount);
         setStream((prev) => (prev ? { ...prev, viewerCount } : null));
       });
@@ -239,8 +248,8 @@ export default function LivePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="aspect-video">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden h-[600px] flex flex-col">
+              <div className="flex-1">
                 <iframe
                   src={getEmbedUrl(stream.youtube_url)}
                   className="w-full h-full"
@@ -248,9 +257,9 @@ export default function LivePage() {
                   allowFullScreen
                 />
               </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold text-gray-800">
+              <div className="p-4 border-t">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-800">
                     {stream.title}
                   </h2>
                   <div className="flex items-center space-x-4">
@@ -265,39 +274,38 @@ export default function LivePage() {
                     </span>
                   </div>
                 </div>
-                <div className="prose max-w-none">
-                  <p className="text-gray-600">Welcome to our live stream!</p>
-                </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex flex-col h-[600px]">
-              <h3 className="text-lg font-semibold mb-4">Live Chat</h3>
+          <div className="bg-white rounded-lg shadow-md h-[600px] flex flex-col">
+            <div className="p-4 border-b">
+              <h3 className="text-lg font-semibold">Live Chat</h3>
+            </div>
 
-              <div
-                ref={commentsRef}
-                className="flex-1 overflow-y-auto mb-4 space-y-4"
-              >
-                {comments.map((comment) => (
-                  <div key={comment.id} className="bg-gray-50 rounded p-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-semibold text-sm text-blue-600">
-                        {comment.username}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {new Date(comment.timestamp).toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 mt-1">
-                      {comment.message}
-                    </p>
+            <div
+              ref={commentsRef}
+              className="flex-1 overflow-y-auto p-4 space-y-4"
+            >
+              {comments.map((comment) => (
+                <div key={comment.id} className="bg-gray-50 rounded p-3">
+                  <div className="flex items-center space-x-2">
+                    <span className="font-semibold text-sm text-blue-600">
+                      {comment.username}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(comment.timestamp).toLocaleTimeString()}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-sm text-gray-700 mt-1">
+                    {comment.message}
+                  </p>
+                </div>
+              ))}
+            </div>
 
-              <form onSubmit={handleSubmitComment} className="mt-auto">
+            <div className="p-4 border-t">
+              <form onSubmit={handleSubmitComment}>
                 {!username && (
                   <input
                     type="text"
