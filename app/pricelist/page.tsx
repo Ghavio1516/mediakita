@@ -26,7 +26,7 @@ const PricelistPage = () => {
     "Apabila billboard sudah terpasang, maka tidak ada revisi / mengganti billboard seperti yang sudah disepakati",
     "Tidak akan ada refund terhadap billboard yang dilepas sebelum waktu pemasangan selesai / yang telah disepakati",
     "Cancel billboard minimal H-2. Apabila melakukan cancel H-1 (paling telatnya H-1, pukul 17.00), DP HANGUS, apabila sudah Full Payment akan di refund 30%",
-    "Untuk pemesanan jasa media yang mengatasnamakan badan usaha/perusahaan, wajib melampirkan Surat Izin Usaha (SIU) yang sah dan berlaku"
+    "Untuk pemesanan jasa media yang mengatasnamakan badan usaha/perusahaan, wajib melampirkan Surat Izin Usaha (SIU) yang sah dan berlaku",
   ];
 
   const pricelistData = {
@@ -139,41 +139,47 @@ const PricelistPage = () => {
         harga: "$1.500.000",
         hargaPajak: "$1.575.000",
       },
+      {
+        lokasi: "Pengadilan",
+        jenis: "Landscape",
+        harga: "$1.500.000",
+        hargaPajak: "$1.575.000",
+      },
     ],
     photo: [
       {
         namaPaket: "Paket 1",
         jenisSesi: "Solo Session / Couple Session",
         keterangan: "1 Sesi, 1 Venue, 1 Hour",
-        harga: "$2.0 M",
+        harga: "$2.000.000",
       },
       {
         namaPaket: "Paket 2",
         jenisSesi: "Solo Session / Couple Session",
         keterangan: "2 Sesi, 2 Venue, 2 Hour",
-        harga: "$3.5 M",
+        harga: "$3.500.000",
       },
       {
         namaPaket: "Paket 3",
         jenisSesi: "Fam Session / Group Session",
         keterangan: "1 Sesi, 1 Venue, 1 Hour",
-        harga: "$3.0 M",
+        harga: "$3.000.000",
       },
       {
         namaPaket: "Paket 4",
         jenisSesi: "Fam Session / Group Session",
         keterangan: "2 Sesi, 2 Venue, 2 Hour",
-        harga: "$4 M",
+        harga: "$4.000.000",
       },
     ],
     soloVideo: [
       {
         durasi: "30s",
-        harga: "$8 - 10 M",
+        harga: "$8.000.000 - 10.000.000",
       },
       {
         durasi: "1 Min",
-        harga: "$10 - 16 M",
+        harga: "$10.000.000 - 16.000.000",
       },
       {
         durasi: "2 Min",
@@ -227,6 +233,10 @@ const PricelistPage = () => {
         paket: "Paket Premium (Berita Tablet + Live Report)",
         harga: "$800.000",
       },
+      {
+        paket: "Live Streaming (1 Jam)",
+        harga: "$1.000.000",
+      },
     ],
     iklan: [
       {
@@ -248,10 +258,10 @@ const PricelistPage = () => {
     ],
     iklanNotes: [
       "PEMASANGAN BILLBOARD H + 2",
-      "SUDAH INCLUDE BILLBOARD 3 HARI DI KANTOR MEDIA", 
+      "SUDAH INCLUDE BILLBOARD 3 HARI DI KANTOR MEDIA",
       "INCLUDE PAMFLET 50 PCS",
       "IKLAN BERUPA PROMOSI EVENT / ACARA",
-      "UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU"
+      "UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU",
     ],
   };
 
@@ -442,7 +452,11 @@ const PricelistPage = () => {
               <p>!! No Revisions</p>
               <p>!! Untuk Video Max Minor Revision 1x</p>
               <p>!! Exclude pajak 15%</p>
-              <p>!! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU</p>
+              <p>
+                !! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN
+                USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG
+                SAH DAN BERLAKU
+              </p>
             </div>
           </div>
         </div>
@@ -492,7 +506,11 @@ const PricelistPage = () => {
               <p>!! BERUPA VIDEO PENDEK (DANCE / TIKTOK TREND)</p>
               <p>!! TIDAK TERMASUK STYLING/STYLIST, VENUE & KONSEP</p>
               <p>!! EXCLUDE PAJAK 15%</p>
-              <p>!! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU</p>
+              <p>
+                !! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN
+                USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG
+                SAH DAN BERLAKU
+              </p>
             </div>
           </div>
         </div>
@@ -534,7 +552,11 @@ const PricelistPage = () => {
             <div className="text-red-600 space-y-2">
               <p>!! ASSETS DARI CLIENT</p>
               <p>!! DETAIL DARI CLIENT (TANGGAL/LOKASI/KATA-KATA)</p>
-              <p>!! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU</p>
+              <p>
+                !! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN
+                USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG
+                SAH DAN BERLAKU
+              </p>
             </div>
           </div>
         </div>
@@ -576,7 +598,11 @@ const PricelistPage = () => {
             <div className="text-red-600 space-y-2">
               <p>!! LIVE REPORT (DARI ACARA MULAI - SELESAI) MAX 3 JAM</p>
               <p>!! PENULISAN BERITA H+1</p>
-              <p>!! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG SAH DAN BERLAKU</p>
+              <p>
+                !! UNTUK PEMESANAN JASA MEDIA YANG MENGATASNAMAKAN BADAN
+                USAHA/PERUSAHAAN, WAJIB MELAMPIRKAN SURAT IZIN USAHA (SIU) YANG
+                SAH DAN BERLAKU
+              </p>
             </div>
           </div>
         </div>
