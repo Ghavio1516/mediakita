@@ -20,6 +20,9 @@ export default function PortfolioPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>([]);
+  const [selectedMedia, setSelectedMedia] = useState<PortfolioItem | null>(
+    null
+  );
 
   useEffect(() => {
     fetchPortfolio();
@@ -42,6 +45,123 @@ export default function PortfolioPage() {
       setError("Failed to load portfolio items");
       setLoading(false);
     }
+  };
+
+  const getVideoType = (url: string) => {
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      return "youtube";
+    } else if (url.includes("tiktok.com")) {
+      return "tiktok";
+    }
+    return "regular";
+  };
+
+  const getVideoId = (url: string, type: string) => {
+    if (type === "youtube") {
+      const regExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[2].length === 11 ? match[2] : null;
+    } else if (type === "tiktok") {
+      return url.split("/").pop()?.split("?")[0] || null;
+    }
+    return null;
+  };
+
+  const getThumbnail = (item: PortfolioItem) => {
+    if (item.media_type === "image") {
+      return item.media_url;
+    }
+
+    const videoType = getVideoType(item.media_url);
+    const videoId = getVideoId(item.media_url, videoType);
+
+    if (videoType === "youtube" && videoId) {
+      return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+    }
+
+    return item.thumbnail_url || "/video-placeholder.jpg";
+  };
+
+  const renderMedia = (item: PortfolioItem) => {
+    const thumbnail = getThumbnail(item);
+    const isVideo = item.media_type === "video";
+
+    return (
+      <div
+        className="w-full h-full relative group cursor-pointer"
+        onClick={() => setSelectedMedia(item)}
+      >
+        <img
+          src={thumbnail}
+          alt={item.title}
+          className="w-full h-full object-cover"
+        />
+        {isVideo && (
+          <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-16 w-16 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderMediaModal = (item: PortfolioItem) => {
+    if (item.media_type === "image") {
+      return (
+        <img
+          src={item.media_url}
+          alt={item.title}
+          className="w-full h-full object-contain"
+        />
+      );
+    }
+
+    const videoType = getVideoType(item.media_url);
+    const videoId = getVideoId(item.media_url, videoType);
+
+    if (videoType === "youtube" && videoId) {
+      return (
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}`}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      );
+    } else if (videoType === "tiktok" && videoId) {
+      return (
+        <iframe
+          src={`https://www.tiktok.com/embed/${videoId}`}
+          className="w-full h-full"
+          allowFullScreen
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        />
+      );
+    }
+
+    return (
+      <video
+        src={item.media_url}
+        poster={item.thumbnail_url}
+        controls
+        className="w-full h-full"
+        autoPlay
+      />
+    );
   };
 
   const filteredItems =
@@ -111,22 +231,7 @@ export default function PortfolioPage() {
               key={item.id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <div className="relative aspect-video">
-                {item.media_type === "image" ? (
-                  <img
-                    src={item.media_url}
-                    alt={item.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <video
-                    src={item.media_url}
-                    poster={item.thumbnail_url}
-                    controls
-                    className="w-full h-full object-cover"
-                  />
-                )}
-              </div>
+              <div className="relative aspect-video">{renderMedia(item)}</div>
               <div className="p-4">
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {item.title}
@@ -147,6 +252,43 @@ export default function PortfolioPage() {
             <p className="text-gray-500 text-lg">
               No portfolio items found in this category.
             </p>
+          </div>
+        )}
+
+        {/* Media Modal */}
+        {selectedMedia && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h3 className="text-lg font-semibold">{selectedMedia.title}</h3>
+                <button
+                  onClick={() => setSelectedMedia(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="p-4">
+                <div className="aspect-video">
+                  {renderMediaModal(selectedMedia)}
+                </div>
+                <p className="mt-4 text-gray-600">
+                  {selectedMedia.description}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

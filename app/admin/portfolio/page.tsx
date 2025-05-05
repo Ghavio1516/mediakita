@@ -93,6 +93,92 @@ export default function AdminPortfolioPage() {
     }
   };
 
+  const getVideoType = (url: string) => {
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      return "youtube";
+    } else if (url.includes("tiktok.com")) {
+      return "tiktok";
+    }
+    return "regular";
+  };
+
+  const getVideoId = (url: string, type: string) => {
+    if (type === "youtube") {
+      const regExp =
+        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[2].length === 11 ? match[2] : null;
+    } else if (type === "tiktok") {
+      return url.split("/").pop()?.split("?")[0] || null;
+    }
+    return null;
+  };
+
+  const renderMediaPreview = (item: PortfolioItem) => {
+    if (item.media_type === "image") {
+      return (
+        <img
+          src={item.media_url}
+          alt={item.title}
+          className="w-16 h-16 object-cover rounded"
+        />
+      );
+    }
+
+    const videoType = getVideoType(item.media_url);
+    const videoId = getVideoId(item.media_url, videoType);
+
+    if (videoType === "youtube" && videoId) {
+      return (
+        <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+          <img
+            src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+            alt={item.title}
+            className="w-full h-full object-cover rounded"
+          />
+        </div>
+      );
+    } else if (videoType === "tiktok" && videoId) {
+      return (
+        <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-8 w-8 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+            />
+          </svg>
+        </div>
+      );
+    }
+
+    return (
+      <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+          />
+        </svg>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -182,13 +268,23 @@ export default function AdminPortfolioPage() {
                 }
                 className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                placeholder={
+                  formData.media_type === "video"
+                    ? "https://www.youtube.com/watch?v=... or https://www.tiktok.com/@username/video/..."
+                    : "https://example.com/image.jpg"
+                }
               />
+              {formData.media_type === "video" && (
+                <p className="mt-1 text-sm text-gray-500">
+                  Paste YouTube or TikTok video URL
+                </p>
+              )}
             </div>
 
             {formData.media_type === "video" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Thumbnail URL
+                  Thumbnail URL (Optional)
                 </label>
                 <input
                   type="url"
@@ -252,6 +348,9 @@ export default function AdminPortfolioPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Preview
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Title
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -269,13 +368,18 @@ export default function AdminPortfolioPage() {
                 {items.map((item) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
+                      {renderMediaPreview(item)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {item.title}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {item.media_type}
+                        {item.media_type === "video"
+                          ? getVideoType(item.media_url)
+                          : item.media_type}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
