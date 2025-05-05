@@ -26,6 +26,9 @@ export default function Header() {
         {/* <Link href="/news">
           <span>Hot News</span>
         </Link> */}
+        <Link href="/portfolio">
+          <span>Portfolio</span>
+        </Link>
         <Link href="/pricelist">
           <span>Price List</span>
         </Link>
