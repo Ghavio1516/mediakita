@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import MediaCarousel from "../components/MediaCarousel";
+
+interface MediaItem {
+  url: string;
+  type: "image" | "video";
+  thumbnail?: string;
+}
 
 interface PortfolioItem {
   id: string;
@@ -10,6 +17,7 @@ interface PortfolioItem {
   media_type: "image" | "video";
   media_url: string;
   thumbnail_url: string;
+  media_list: MediaItem[];
   category: string;
   created_at: string;
 }
@@ -84,6 +92,51 @@ export default function PortfolioPage() {
   };
 
   const renderMedia = (item: PortfolioItem) => {
+    // If there are additional media items, show the first image
+    if (Array.isArray(item.media_list) && item.media_list.length > 0) {
+      const firstImage = item.media_list.find(
+        (media) => media.type === "image"
+      );
+      if (firstImage) {
+        return (
+          <div
+            className="w-full h-full relative group cursor-pointer"
+            onClick={() => setSelectedMedia(item)}
+          >
+            <img
+              src={firstImage.url}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
+            {item.media_list.length > 1 && (
+              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="text-white text-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8 mx-auto mb-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16m-7 6h7"
+                    />
+                  </svg>
+                  <span className="text-sm">
+                    View {item.media_list.length} media
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+    }
+
+    // Fallback to main media
     const thumbnail = getThumbnail(item);
     const isVideo = item.media_type === "video";
 
@@ -120,47 +173,25 @@ export default function PortfolioPage() {
   };
 
   const renderMediaModal = (item: PortfolioItem) => {
-    if (item.media_type === "image") {
-      return (
-        <img
-          src={item.media_url}
-          alt={item.title}
-          className="w-full h-full object-contain"
-        />
-      );
-    }
-
-    const videoType = getVideoType(item.media_url);
-    const videoId = getVideoId(item.media_url, videoType);
-
-    if (videoType === "youtube" && videoId) {
-      return (
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}`}
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      );
-    } else if (videoType === "tiktok" && videoId) {
-      return (
-        <iframe
-          src={`https://www.tiktok.com/embed/${videoId}`}
-          className="w-full h-full"
-          allowFullScreen
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        />
-      );
-    }
+    // Create combined media list with main media first
+    const combinedMediaList: MediaItem[] = [
+      {
+        url: item.media_url,
+        type: item.media_type,
+        thumbnail: item.thumbnail_url,
+      },
+      ...(Array.isArray(item.media_list) ? item.media_list : []),
+    ];
 
     return (
-      <video
-        src={item.media_url}
-        poster={item.thumbnail_url}
-        controls
-        className="w-full h-full"
-        autoPlay
-      />
+      <div className="space-y-4">
+        <div className="relative aspect-video">
+          <MediaCarousel
+            mediaList={combinedMediaList}
+            onClose={() => setSelectedMedia(null)}
+          />
+        </div>
+      </div>
     );
   };
 

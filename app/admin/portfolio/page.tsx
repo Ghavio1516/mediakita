@@ -3,6 +3,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { nanoid } from "nanoid";
+import MediaCarousel from "../../components/MediaCarousel";
+
+interface MediaItem {
+  url: string;
+  type: "image" | "video";
+  thumbnail?: string;
+}
 
 interface PortfolioItem {
   id: string;
@@ -11,6 +18,7 @@ interface PortfolioItem {
   media_type: "image" | "video";
   media_url: string;
   thumbnail_url: string;
+  media_list: MediaItem[];
   category: string;
   created_at: string;
 }
@@ -26,6 +34,7 @@ export default function AdminPortfolioPage() {
     media_type: "image" as "image" | "video",
     media_url: "",
     thumbnail_url: "",
+    media_list: [] as MediaItem[],
     category: "",
   });
 
@@ -59,6 +68,7 @@ export default function AdminPortfolioPage() {
         media_type: "image",
         media_url: "",
         thumbnail_url: "",
+        media_list: [],
         category: "",
       });
       setEditingItem(null);
@@ -77,6 +87,7 @@ export default function AdminPortfolioPage() {
       media_type: item.media_type,
       media_url: item.media_url,
       thumbnail_url: item.thumbnail_url || "",
+      media_list: item.media_list || [],
       category: item.category || "",
     });
   };
@@ -91,6 +102,39 @@ export default function AdminPortfolioPage() {
       console.error("Error deleting portfolio item:", error);
       setError("Failed to delete portfolio item");
     }
+  };
+
+  const addMediaToList = () => {
+    setFormData((prev) => ({
+      ...prev,
+      media_list: [
+        ...prev.media_list,
+        {
+          url: "",
+          type: "image",
+        },
+      ],
+    }));
+  };
+
+  const removeMediaFromList = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      media_list: prev.media_list.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateMediaInList = (
+    index: number,
+    field: keyof MediaItem,
+    value: string
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      media_list: prev.media_list.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      ),
+    }));
   };
 
   const getVideoType = (url: string) => {
@@ -115,6 +159,21 @@ export default function AdminPortfolioPage() {
   };
 
   const renderMediaPreview = (item: PortfolioItem) => {
+    if (Array.isArray(item.media_list) && item.media_list.length > 0) {
+      const firstImage = item.media_list.find(
+        (media) => media.type === "image"
+      );
+      if (firstImage) {
+        return (
+          <img
+            src={firstImage.url}
+            alt={item.title}
+            className="w-16 h-16 object-cover rounded"
+          />
+        );
+      }
+    }
+
     if (item.media_type === "image") {
       return (
         <img
@@ -239,7 +298,7 @@ export default function AdminPortfolioPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Media Type
+                Main Media Type
               </label>
               <select
                 value={formData.media_type}
@@ -258,7 +317,7 @@ export default function AdminPortfolioPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Media URL
+                Main Media URL
               </label>
               <input
                 type="url"
@@ -274,11 +333,6 @@ export default function AdminPortfolioPage() {
                     : "https://example.com/image.jpg"
                 }
               />
-              {formData.media_type === "video" && (
-                <p className="mt-1 text-sm text-gray-500">
-                  Paste YouTube or TikTok video URL
-                </p>
-              )}
             </div>
 
             {formData.media_type === "video" && (
@@ -296,6 +350,100 @@ export default function AdminPortfolioPage() {
                 />
               </div>
             )}
+
+            {/* Media List */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Additional Media
+                </label>
+                <button
+                  type="button"
+                  onClick={addMediaToList}
+                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Add Media
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {formData.media_list.map((media, index) => (
+                  <div key={index} className="p-4 border rounded-lg space-y-3">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-medium">Media {index + 1}</h3>
+                      <button
+                        type="button"
+                        onClick={() => removeMediaFromList(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Remove
+                      </button>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-600 mb-1">
+                        Media Type
+                      </label>
+                      <select
+                        value={media.type}
+                        onChange={(e) =>
+                          updateMediaInList(
+                            index,
+                            "type",
+                            e.target.value as "image" | "video"
+                          )
+                        }
+                        className="w-full p-2 border rounded"
+                      >
+                        <option value="image">Image</option>
+                        <option value="video">Video</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-gray-600 mb-1">
+                        Media URL
+                      </label>
+                      <input
+                        type="url"
+                        value={media.url}
+                        onChange={(e) =>
+                          updateMediaInList(index, "url", e.target.value)
+                        }
+                        className="w-full p-2 border rounded"
+                        required
+                        placeholder={
+                          media.type === "video"
+                            ? "https://example.com/video.mp4"
+                            : "https://example.com/image.jpg"
+                        }
+                      />
+                    </div>
+
+                    {media.type === "video" && (
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-1">
+                          Thumbnail URL (Optional)
+                        </label>
+                        <input
+                          type="url"
+                          value={media.thumbnail || ""}
+                          onChange={(e) =>
+                            updateMediaInList(
+                              index,
+                              "thumbnail",
+                              e.target.value
+                            )
+                          }
+                          className="w-full p-2 border rounded"
+                          placeholder="https://example.com/thumbnail.jpg"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -323,17 +471,18 @@ export default function AdminPortfolioPage() {
                       media_type: "image",
                       media_url: "",
                       thumbnail_url: "",
+                      media_list: [],
                       category: "",
                     });
                   }}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
                 >
                   Cancel
                 </button>
               )}
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
                 {editingItem ? "Update" : "Add"} Item
               </button>
@@ -357,6 +506,9 @@ export default function AdminPortfolioPage() {
                     Type
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Additional Media
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Category
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -377,10 +529,18 @@ export default function AdminPortfolioPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                        {item.media_type === "video"
-                          ? getVideoType(item.media_url)
-                          : item.media_type}
+                        {item.media_type}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                          {Array.isArray(item.media_list)
+                            ? item.media_list.length
+                            : 0}{" "}
+                          items
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">

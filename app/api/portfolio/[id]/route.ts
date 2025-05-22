@@ -14,21 +14,28 @@ export async function GET(
       database: process.env.DB_NAME
     });
 
-    const [results] = await connection.execute(
+    const [items] = await connection.execute(
       'SELECT * FROM portfolio WHERE id = ?',
       [params.id]
     );
 
     await connection.end();
 
-    if (!results[0]) {
+    if (!items || (Array.isArray(items) && items.length === 0)) {
       return NextResponse.json(
         { error: 'Portfolio item not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(results[0]);
+    // Parse media_list JSON string back to array
+    const item = Array.isArray(items) ? items[0] : items;
+    const parsedItem = {
+      ...item,
+      media_list: item.media_list ? JSON.parse(item.media_list) : []
+    };
+
+    return NextResponse.json(parsedItem);
   } catch (error) {
     console.error('Error fetching portfolio item:', error);
     return NextResponse.json(
@@ -44,7 +51,15 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { title, description, media_type, media_url, thumbnail_url, category } = await request.json();
+    const { 
+      title, 
+      description, 
+      media_type, 
+      media_url, 
+      thumbnail_url, 
+      category,
+      media_list 
+    } = await request.json();
 
     if (!title || !media_type || !media_url) {
       return NextResponse.json(
@@ -61,8 +76,17 @@ export async function PUT(
     });
 
     await connection.execute(
-      'UPDATE portfolio SET title = ?, description = ?, media_type = ?, media_url = ?, thumbnail_url = ?, category = ? WHERE id = ?',
-      [title, description, media_type, media_url, thumbnail_url, category, params.id]
+      'UPDATE portfolio SET title = ?, description = ?, media_type = ?, media_url = ?, thumbnail_url = ?, category = ?, media_list = ? WHERE id = ?',
+      [
+        title,
+        description,
+        media_type,
+        media_url,
+        thumbnail_url,
+        category,
+        media_list ? JSON.stringify(media_list) : null,
+        params.id
+      ]
     );
 
     await connection.end();
@@ -89,10 +113,7 @@ export async function DELETE(
       database: process.env.DB_NAME
     });
 
-    await connection.execute(
-      'DELETE FROM portfolio WHERE id = ?',
-      [params.id]
-    );
+    await connection.execute('DELETE FROM portfolio WHERE id = ?', [params.id]);
 
     await connection.end();
     return NextResponse.json({ message: 'Portfolio item deleted successfully' });
