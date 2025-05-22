@@ -1,6 +1,18 @@
 import { NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
+interface PortfolioItem {
+  id: string;
+  title: string;
+  description: string;
+  media_type: "image" | "video";
+  media_url: string;
+  thumbnail_url: string;
+  media_list: string | null;
+  category: string;
+  created_at: string;
+}
+
 // GET single portfolio item
 export async function GET(
   request: Request,
@@ -14,22 +26,21 @@ export async function GET(
       database: process.env.DB_NAME
     });
 
-    const [items] = await connection.execute(
+    const [rows] = await connection.execute(
       'SELECT * FROM portfolio WHERE id = ?',
       [params.id]
     );
 
     await connection.end();
 
-    if (!items || (Array.isArray(items) && items.length === 0)) {
+    if (!Array.isArray(rows) || rows.length === 0) {
       return NextResponse.json(
         { error: 'Portfolio item not found' },
         { status: 404 }
       );
     }
 
-    // Parse media_list JSON string back to array
-    const item = Array.isArray(items) ? items[0] : items;
+    const item = rows[0] as PortfolioItem;
     const parsedItem = {
       ...item,
       media_list: item.media_list ? JSON.parse(item.media_list) : []
@@ -39,7 +50,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching portfolio item:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Failed to fetch portfolio item' },
       { status: 500 }
     );
   }
@@ -94,7 +105,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating portfolio item:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Failed to update portfolio item' },
       { status: 500 }
     );
   }
@@ -120,7 +131,7 @@ export async function DELETE(
   } catch (error) {
     console.error('Error deleting portfolio item:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
+      { error: 'Failed to delete portfolio item' },
       { status: 500 }
     );
   }
